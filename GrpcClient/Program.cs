@@ -8,8 +8,11 @@ namespace GrpcClient
 {
     public class Program
     {
+        private static Random random;
+        
         static async Task Main(string[] args)
         {
+            random = new Random();
             //var channel = GrpcChannel.ForAddress("http://localhost:5281");
             //var client = new Sample.SampleClient(channel);
             ////var response = client.GetFullName(new SampleRequest { FirstName = "John", LastName = "Thomas" });
@@ -28,8 +31,23 @@ namespace GrpcClient
             //}
             //await channel.ShutdownAsync();
 
-          await  ServerStreamingDemo();
+          await ClientStreamingDemo();
             Console.ReadLine();
+
+
+        }
+        private static async Task ClientStreamingDemo()
+        {
+            var channel = GrpcChannel.ForAddress("http://localhost:5281");
+            var client = new StreamDemo.StreamDemoClient(channel);
+            var stream = client.ClientStreamingDemo();
+            for (int i = 0; i <= 10; i++) {
+              await   stream.RequestStream.WriteAsync(new Test { TestMessage = $"Message {i}" });
+                var randomNumber = random.Next(1,10);
+                await Task.Delay(randomNumber * 1000);
+            }
+            await stream.RequestStream.CompleteAsync();
+            Console.WriteLine("Completed client streaming");
 
 
         }
