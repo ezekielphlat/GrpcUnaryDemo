@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcService.Protos";
+
+package product;
+
+service Product {
+  rpc SaveProduct (ProductModel) returns (SampleResponse);
+}
+
+message ProductModel {
+	string ProductName = 1;
+	string ProductCode = 2;
+	double Price = 3;
+}
+
+message productSaveResponse {
+	int32 StatusCode = 1;
+	bool IsSuccessful = 2;
+}
