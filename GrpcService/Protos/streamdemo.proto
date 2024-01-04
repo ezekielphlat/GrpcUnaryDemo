@@ -7,6 +7,7 @@ package streamdemo;
 service StreamDemo {
 	rpc ServerStreamingDemo(Test) returns (stream Test);
 	rpc ClientStreamingDemo(stream Test) returns (Test);
+	rpc BidirectionalStreamingDemo(stream Test) returns (stream Test);
 }
 
 message Test{

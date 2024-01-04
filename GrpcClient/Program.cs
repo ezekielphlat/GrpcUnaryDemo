@@ -31,9 +31,40 @@ namespace GrpcClient
             //}
             //await channel.ShutdownAsync();
 
-          await ClientStreamingDemo();
+          await BidirectionStreamingDemo();
             Console.ReadLine();
 
+
+        }
+
+        private static async Task BidirectionStreamingDemo()
+        {
+            var channel = GrpcChannel.ForAddress("http://localhost:5281");
+            var client = new StreamDemo.StreamDemoClient(channel);
+            var stream = client.BidirectionalStreamingDemo();
+
+            var requestTask = Task.Run(async () =>
+            {
+                for (int i = 0; i <= 10; i++) {
+                    var randomNumber = random.Next(1, 10);
+                    await Task.Delay(randomNumber * 1000);
+                    await stream.RequestStream.WriteAsync(new Test { TestMessage = i.ToString() });
+                    Console.WriteLine("Sent Request:  " + i);
+
+                }
+                await stream.RequestStream.CompleteAsync();
+            });
+
+            var responseTask = Task.Run(async () => {
+                while(await stream.ResponseStream.MoveNext(CancellationToken.None))
+                {
+                   Console.WriteLine("Recieved response: " + stream.ResponseStream.Current.TestMessage);
+                }
+                Console.WriteLine("Response stream completed");
+            });
+
+            await Task.WhenAll(requestTask, responseTask);
+            await channel.ShutdownAsync();
 
         }
         private static async Task ClientStreamingDemo()
@@ -48,6 +79,7 @@ namespace GrpcClient
             }
             await stream.RequestStream.CompleteAsync();
             Console.WriteLine("Completed client streaming");
+            await channel.ShutdownAsync();
 
 
         }
