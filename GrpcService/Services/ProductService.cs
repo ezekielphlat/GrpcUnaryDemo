@@ -18,31 +18,40 @@ namespace GrpcService.Services
         }
         public override Task<ProductList> GetProducts(Empty request, ServerCallContext context)
         {
+             var stockDate = DateTime.SpecifyKind(new DateTime(2022, 2, 1), DateTimeKind.Utc);
+
             var products = new List<ProductModel>() { new ProductModel
             {
                 ProductName = "Macbook pro",
                 ProductCode = "1",
                 Price = 1000,
+                StockDate =  Timestamp.FromDateTime(stockDate),
             },
              new ProductModel
             {
                 ProductName = "Macbook pro",
                 ProductCode = "1",
-                Price = 1000,
+                Price = 455,
+               StockDate =  Timestamp.FromDateTime(stockDate),
+
             },
 
               new ProductModel
             {
-                ProductName = "Macbook pro",
+                ProductName = "Elite book pro",
                 ProductCode = "1",
-                Price = 1000,
+                Price = 40,
+                 StockDate =  Timestamp.FromDateTime(stockDate),
+
             },
 
                new ProductModel
             {
-                ProductName = "Macbook pro",
+                ProductName = "Windows pro",
                 ProductCode = "1",
-                Price = 1000,
+                Price = 233,
+                StockDate =  Timestamp.FromDateTime(stockDate),
+
             },
 
 
