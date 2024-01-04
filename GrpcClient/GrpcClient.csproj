@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Protos\product.proto" />
+    <None Remove="Protos\streamdemo.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
 	<ItemGroup>
 		<Protobuf Include="Protos\product.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\sample.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\streamdemo.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 </Project>
